@@ -3,27 +3,53 @@
 
 # Example
 ```log
-WORDOOR:desktop WzxJiang$ python tree.py /Users/Wordoor-Z/Desktop/WebServer
-├── WebServer
-|   └── server
-|       ├── db.sqlite3
-|       ├── first
-|       |   ├── __init__.py
-|       |   ├── admin.py
-|       |   ├── apps.py
-|       |   ├── migrations
-|       |   |   └── __init__.py
-|       |   ├── models.py
-|       |   ├── tests.py
-|       |   └── views.py
-|       ├── manage.py
-|       └── server
-|           ├── __init__.py
-|           ├── __init__.pyc
-|           ├── settings.py
-|           ├── settings.pyc
-|           ├── urls.py
-|           ├── urls.pyc
-|           ├── wsgi.py
-|           └── wsgi.pyc
+WORDOOR:desktop WzxJiang$ python tree.py /Users/Wordoor-Z/Desktop/TASKs 
+├── TASKs
+|   ├── TASKs
+|   |   ├── AppDelegate.swift
+|   |   ├── Assets.xcassets
+|   |   |   ├── AppIcon.appiconset
+|   |   |   |   └── Contents.json
+|   |   |   ├── Contents.json
+|   |   |   └── OKButton.imageset
+|   |   |       ├── Contents.json
+|   |   |       └── OKButton@3x.png
+|   |   ├── Base.lproj
+|   |   |   └── LaunchScreen.storyboard
+|   |   ├── Info.plist
+|   |   ├── Sections
+|   |   |   ├── Main
+|   |   |   |   ├── Control
+|   |   |   |   |   ├── CreateViewController.swift
+|   |   |   |   |   └── MainViewController.swift
+|   |   |   |   ├── Model
+|   |   |   |   |   └── CreateAnimation.swift
+|   |   |   |   └── View
+|   |   |   |       ├── CreateView.swift
+|   |   |   |       └── MainCell.swift
+|   |   |   └── Root
+|   |   |       ├── Control
+|   |   |       |   └── RootViewController.swift
+|   |   |       ├── Model
+|   |   |       |   └── RootAnimation.swift
+|   |   |       └── View
+|   |   └── Vendor
+|   |       └── Viscosity
+|   |           ├── VisConstraint.swift
+|   |           ├── VisConstraintMaker.swift
+|   |           └── Viscosity+Extensions.swift
+|   └── TASKs.xcodeproj
+|       ├── project.pbxproj
+|       ├── project.xcworkspace
+|       |   ├── contents.xcworkspacedata
+|       |   └── xcuserdata
+|       |       └── WzxJiang.xcuserdatad
+|       |           └── UserInterfaceState.xcuserstate
+|       └── xcuserdata
+|           └── WzxJiang.xcuserdatad
+|               ├── xcdebugger
+|               |   └── Breakpoints_v2.xcbkptlist
+|               └── xcschemes
+|                   ├── TASKs.xcscheme
+|                   └── xcschememanagement.plist
 ```
