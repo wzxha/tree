@@ -18,7 +18,6 @@ class Tree():
             if sub_path == '.DS_Store':
                 continue
             list.append(self.get_file_list(path + '/' + sub_path, sub_path))
-
         return list
 
     def show_brance(self, arr, scale=0, groups = [0],  end=False):
@@ -49,9 +48,10 @@ class Tree():
                      self.show_brance(x, scale+1, groups, True)
                 else:
                     self.show_brance(x, scale+1, groups, False)
-
             elif isinstance(x, str):
                 print   space + '── ' + x
+
+
 
 if __name__ == '__main__':
     path = os.getcwd()
