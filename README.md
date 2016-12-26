@@ -2,7 +2,7 @@
 打印文件夹结构
 
 # Example
-```shell
+```log
 WORDOOR:desktop WzxJiang$ python tree.py /Users/Wordoor-Z/Desktop/WebServer
 ├── WebServer
 |   └── server
