@@ -26,9 +26,9 @@ class Tree():
         if self.scale > 0 and scale > self.scale:
             return
 
-        space = '|'
+        space = ' '
         if scale == 0:
-            space = '├'
+            space = '└'
         else:
             for i in range(0, scale):
                 if i == scale -1:
@@ -58,14 +58,49 @@ class Tree():
                 print   space + '── ' + x
 
 
+def help():
+    print """
+Usage: Tree [options]
+            
+    \033[32m-p, --path:\033[0m
+        Path to the project that you want tree
+
+    \033[32m-d, --depth:\033[0m
+        Depth to the tree
+
+    \033[32m-h, --help:\033[0m
+        Prints a help message. 
+            """
+    exit(0)
+
 if __name__ == '__main__':
+    i = -1
+    for index, arg in enumerate(sys.argv):
+        if arg == 'tree.py':
+            i = index
+            break
+    
+    
+    commands = sys.argv[i+1:]
+
     path  = os.getcwd()
     scale = 0
-
-    if (len(sys.argv) > 1):
-        path = sys.argv[1]
-    if (len(sys.argv) > 2):
-        scale = sys.argv[2]
-
+    for index, command in enumerate(commands):
+        if command == '-p' or command == '--path':
+            if index + 1 < len(commands): 
+                path = commands[index + 1]
+            else:
+                print "\033[31mUsed -p, but no path.\033[0m"
+                help()
+        elif command == '-d' or command == '--depth':
+            if index + 1 < len(commands): 
+                scale = commands[index + 1]
+            else:
+                print "\033[31mUsed -d, but no depth.\033[0m"
+                help()
+        elif command == '-h' or command == '--help':
+            help()
+            
+        
     tree = Tree(path, scale)
     tree.show_tree()
