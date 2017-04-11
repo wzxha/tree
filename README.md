@@ -1,4 +1,4 @@
-# tree.py
+# tree
 打印文件夹结构
 
 # Example
