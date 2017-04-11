@@ -2,9 +2,10 @@
 import sys, os
 
 class Tree():
-    def __init__(self, path, scale = 0):
-        self.path  = path
+    def __init__(self, path, scale, ignore):
+        self.path = path
         self.scale = int(scale)
+        self.ignore = ignore
 
     def show_tree(self):
         complete_list = (self.get_file_list(self.path, self.path.split('/')[-1]))
@@ -16,13 +17,13 @@ class Tree():
             return list
 
         for sub_path in os.listdir(path):
-            if sub_path in ['.DS_Store' , '.svn']:
+            if sub_path in self.ignore:
                 continue
             list.append(self.get_file_list(path + '/' + sub_path, sub_path))
 
         return list
 
-    def show_brance(self, arr, scale=0, groups = [0],  end=False):
+    def show_brance(self, arr, scale=0, groups=[0], end=False):
         if self.scale > 0 and scale > self.scale:
             return
 
@@ -68,6 +69,9 @@ Usage: Tree [options]
     \033[32m-d, --depth:\033[0m
         Depth to the tree
 
+    \033[32m--ignore:\033[0m
+        Ignore to the dir in tree
+
     \033[32m-h, --help:\033[0m
         Prints a help message. 
             """
@@ -85,22 +89,34 @@ if __name__ == '__main__':
 
     path  = os.getcwd()
     scale = 0
+    ignore = ['.DS_Store', '.svn', '.git']
     for index, command in enumerate(commands):
         if command == '-p' or command == '--path':
             if index + 1 < len(commands): 
                 path = commands[index + 1]
             else:
-                print "\033[31mUsed -p, but no path.\033[0m"
+                print "\033[31mUsed -p, but no input path.\033[0m"
                 help()
+
         elif command == '-d' or command == '--depth':
             if index + 1 < len(commands): 
                 scale = commands[index + 1]
             else:
-                print "\033[31mUsed -d, but no depth.\033[0m"
+                print "\033[31mUsed -d, but no input depth.\033[0m"
                 help()
+
+        elif command == '--ignore':
+            if index + 1 < len(commands): 
+                ignore += commands[index + 1].split(',')
+                print ignore
+                exit
+            else:
+                print "\033[31mUsed --ignore, but no input ignore.\033[0m"
+                help()
+
         elif command == '-h' or command == '--help':
             help()
             
         
-    tree = Tree(path, scale)
+    tree = Tree(path, scale, ignore)
     tree.show_tree()
