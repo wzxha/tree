@@ -1,65 +1,94 @@
-#-*- coding: utf-8 -*-
-import sys, os
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+#  Created by wzxjiang on 16/12/26.
+#  Copyright © 2016年 wzxjiang. All rights reserved.
+#
+#  https://github.com/Wzxhaha/tree
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy
+#  of this software and associated documentation files (the "Software"), to deal
+#  in the Software without restriction, including without limitation the rights
+#  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#  copies of the Software, and to permit persons to whom the Software is
+#  furnished to do so, subject to the following conditions:
+#
+#  The above copyright notice and this permission notice shall be included in
+#  all copies or substantial portions of the Software.
+#
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+#  THE SOFTWARE.
+
+from sys import argv
+from os.path import isdir
+from os import listdir, getcwd
 
 class Tree():
-    def __init__(self, path, scale, ignore):
+    def __init__(self, path, depth, ignore):
         self.path = path
-        self.scale = int(scale)
+        self.depth = int(depth)
         self.ignore = ignore
 
     def show_tree(self):
         complete_list = (self.get_file_list(self.path, self.path.split('/')[-1]))
         self.show_brance(complete_list)
 
-    def get_file_list(self, path, name):
-        list = [name]
-        if not os.path.isdir(path):
-            return list
+    def get_file_list(self, path, dir_name):
+        dir_names = [dir_name]
+        if not isdir(path):
+            return dir_names
 
-        for sub_path in os.listdir(path):
-            if sub_path in self.ignore:
+        for sub_dir_name in listdir(path):
+            if sub_dir_name in self.ignore:
                 continue
-            list.append(self.get_file_list(path + '/' + sub_path, sub_path))
+            dir_names.append(self.get_file_list(path + '/' + sub_dir_name, sub_dir_name))
 
-        return list
+        return dir_names
 
-    def show_brance(self, arr, scale=0, groups=[0], end=False):
-        if self.scale > 0 and scale > self.scale:
+    def show_brance(self, dir_names, depth=0, groups=[0], end=False):
+
+        # over depth
+        if self.depth > 0 and depth > self.depth:
             return
 
-        space = ' '
-        if scale == 0:
-            space = '└'
-        else:
-            for i in range(0, scale):
-                if i == scale -1:
-                    if end == True:
+        space = '└'
+        if depth != 0:
+            space = " "
+            for i in range(0, depth):
+                # last depth
+                if i == depth-1:
+                    if end is True:
                         space = space + '   └'
-                        if scale-1 in groups:
-                            groups.remove(scale-1)
+                        if depth-1 in groups:
+                            groups.remove(depth-1)
                     else:
                         space = space + '   ├'
+
+                    continue
+
+                # normal
+                if i in groups:
+                    space = space + '   |'
                 else:
-                    if i in groups:
-                        space = space + '   |'
-                    else:
-                        space = space + '    '
+                    space = space + '    '
 
-        for index, x in enumerate(arr):
-            if isinstance(x, list):
-                if not (scale + 1 in groups):
-                    groups.append(scale + 1)
-
-                if index == len(arr)-1:
-                     self.show_brance(x, scale+1, groups, True)
+        for index, name in enumerate(dir_names):
+            if isinstance(name, list):
+                if (depth + 1) not in groups:
+                    groups.append(depth + 1)
+                if index == len(dir_names)-1:
+                    self.show_brance(name, depth+1, groups, True)
                 else:
-                    self.show_brance(x, scale+1, groups, False)
+                    self.show_brance(name, depth+1, groups, False)
+            elif isinstance(name, str):
+                print space + '── ' + name
 
-            elif isinstance(x, str):
-                print   space + '── ' + x
-
-
-def help():
+def log_usage():
     print """
 Usage: Tree [options]
             
@@ -77,46 +106,34 @@ Usage: Tree [options]
             """
     exit(0)
 
-if __name__ == '__main__':
-    i = -1
-    for index, arg in enumerate(sys.argv):
-        if arg == 'tree.py':
-            i = index
-            break
-    
-    
-    commands = sys.argv[i+1:]
+def main():
+    commands = argv[1:]
 
-    path  = os.getcwd()
-    scale = 0
+    path = getcwd()
+    depth = 0
     ignore = ['.DS_Store', '.svn', '.git']
-    for index, command in enumerate(commands):
-        if command == '-p' or command == '--path':
-            if index + 1 < len(commands): 
-                path = commands[index + 1]
-            else:
-                print "\033[31mUsed -p, but no input path.\033[0m"
-                help()
 
-        elif command == '-d' or command == '--depth':
-            if index + 1 < len(commands): 
-                scale = commands[index + 1]
-            else:
-                print "\033[31mUsed -d, but no input depth.\033[0m"
-                help()
+    while len(commands):
+        command = commands[0]
+        del commands[0]
+        if command in ['-h', '--help']:
+            log_usage()
 
-        elif command == '--ignore':
-            if index + 1 < len(commands): 
-                ignore += commands[index + 1].split(',')
-                print ignore
-                exit
-            else:
-                print "\033[31mUsed --ignore, but no input ignore.\033[0m"
-                help()
+        if len(commands) == 0:
+            print "\n\033[31m[ERROR] >>\n '%s' is the wrong instruction\033[0m" %(command)
+            log_usage()
 
-        elif command == '-h' or command == '--help':
-            help()
-            
-        
-    tree = Tree(path, scale, ignore)
+        if command in ['-p', '--path']:
+            path = commands[0]
+        elif command in ['-d', '--depth']:
+            depth = commands[0]
+        elif command in ['--ignore']:
+            ignore += commands[0].split(',')
+        del commands[0]
+
+    tree = Tree(path, depth, ignore)
     tree.show_tree()
+
+
+if __name__ == '__main__':
+    main()
